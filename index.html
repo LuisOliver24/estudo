@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Teoria da Contabilidade — Estudos</title>
+<style>
+@property --a{syntax:"<angle>";initial-value:0deg;inherits:false}
+:root{--bg:#ececec;--surface:#ffffff;--ink:#2b2b2b;--muted:#666666;--g1:#e5b352;--g2:#8a6410;--g3:#f3ecdb;--line:#d9d9d9;--ok:#2e8b5b;--okbg:#dff1e6;--bad:#c2564d;--badbg:#f8e0dd;--led:#ffcf66;--sun:#ffe08a;--onbtn:#2b2b2b;--mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#2b2b2b;--surface:#383838;--ink:#f1f1f1;--muted:#b8b8b8;--g2:#f0c674;--g3:#4a4333;--line:#4d4d4d;--ok:#7fe0a8;--okbg:#244233;--bad:#ff9c93;--badbg:#472826;--led:#ffd98a;--sun:#e5c46a}}
+:root[data-theme="dark"]{--bg:#2b2b2b;--surface:#383838;--ink:#f1f1f1;--muted:#b8b8b8;--g2:#f0c674;--g3:#4a4333;--line:#4d4d4d;--ok:#7fe0a8;--okbg:#244233;--bad:#ff9c93;--badbg:#472826;--led:#ffd98a;--sun:#e5c46a}
+html{scroll-padding-top:env(safe-area-inset-top,0px);background:var(--bg)}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;color:var(--ink);font:16px/1.55 "Segoe UI",system-ui,-apple-system,Roboto,sans-serif;background:radial-gradient(900px 500px at 8% -10%,var(--g3),transparent 60%),radial-gradient(700px 500px at 100% 100%,var(--g3),transparent 60%),var(--bg);background-attachment:fixed}
+body::before{content:"";position:fixed;inset:0;padding:4px;pointer-events:none;z-index:100;background:conic-gradient(from var(--a),transparent 0 62%,var(--led) 92%,#fff 100%);-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask:linear-gradient(#000 0 0) content-box exclude,linear-gradient(#000 0 0);filter:drop-shadow(0 0 7px var(--led));animation:spin 7s linear infinite}
+@keyframes spin{to{--a:360deg}}
+h1,h2,h3{font-family:Georgia,"Times New Roman",serif;line-height:1.2;margin:0}
+.wrap{max-width:860px;margin:0 auto;padding:0 20px}
+.top{display:flex;justify-content:space-between;align-items:center;padding-top:24px;padding-bottom:6px}
+h1{font-size:clamp(1.5rem,4.5vw,2.2rem)}
+.top p{margin:4px 0 0;color:var(--muted)}
+.ic{background:var(--surface);border:1px solid var(--line);border-radius:12px;width:44px;height:44px;font-size:1.2rem;cursor:pointer}
+.tabs{display:flex;gap:8px;padding-top:14px;padding-bottom:6px}
+.tabs button{flex:1;padding:12px;border:1px solid var(--line);background:var(--surface);color:var(--muted);border-radius:14px;font:600 1rem inherit;font-family:inherit;cursor:pointer;transition:.2s}
+.tabs button[aria-selected="true"]{background:var(--g1);color:var(--onbtn);border-color:var(--g1);box-shadow:0 6px 18px -6px var(--g1)}
+button:focus-visible,input:focus-visible{outline:3px solid var(--g1);outline-offset:2px}
+main{padding-top:18px;padding-bottom:56px}
+.search{display:flex;align-items:center;gap:10px;background:var(--surface);border:2px solid var(--line);border-radius:16px;padding:6px 12px;transition:.2s}
+.search:focus-within{border-color:var(--g1);box-shadow:0 0 0 4px color-mix(in srgb,var(--g1) 25%,transparent)}
+.search input{flex:1;border:0;background:transparent;color:var(--ink);font:inherit;padding:10px 0;outline:0;min-width:0}
+.search button{border:0;background:var(--g3);color:var(--ink);border-radius:50%;width:28px;height:28px;cursor:pointer}
+.bar2{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;margin:14px 0}
+.chips{display:flex;gap:8px;flex-wrap:wrap}
+.chip,.pill{border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:999px;padding:8px 16px;font:inherit;font-weight:600;cursor:pointer;transition:.2s}
+.chip[aria-pressed="true"]{background:var(--g1);color:var(--onbtn);border-color:var(--g1)}
+.chip:hover,.pill:hover{transform:translateY(-1px)}
+.prog{display:flex;align-items:center;gap:12px;font-size:.9rem;color:var(--muted)}
+.pbar,.tbar{flex:1;height:8px;background:var(--g3);border-radius:4px;overflow:hidden}
+.pbar i,.tbar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--g1),var(--led));border-radius:4px;transition:width .4s}
+.count{color:var(--muted);font-size:.9rem;margin:10px 0}
+.ch{display:flex;justify-content:space-between;align-items:center;gap:10px;margin:22px 0 10px}
+.ch h2{font-size:1.2rem}
+details{background:var(--surface);border:1px solid var(--line);border-left:5px solid var(--g1);border-radius:14px;margin-bottom:10px;transition:box-shadow .2s}
+details:hover{box-shadow:0 8px 22px -14px var(--g2)}
+details.done{border-left-color:var(--ok)}
+summary{cursor:pointer;padding:14px 16px;font:600 1.05rem Georgia,serif;list-style:none;display:flex;align-items:center;gap:10px}
+summary::-webkit-details-marker{display:none}
+summary span{flex:1}
+summary::after{content:"+";color:var(--g2);font-size:1.4rem;transition:transform .25s}
+details[open] summary::after{transform:rotate(45deg)}
+.tick{display:none;color:var(--ok)}
+details.done .tick{display:inline}
+.body{padding:0 16px 14px}
+.body ul{margin:0 0 12px;padding-left:20px;color:var(--muted)}
+.body li{margin-bottom:6px}
+.body b{color:var(--ink)}
+mark{background:var(--sun);color:#3a300a;border-radius:4px;padding:0 2px}
+.dn{border:1px solid var(--line);background:var(--g3);color:var(--ink);border-radius:10px;padding:8px 14px;font:inherit;font-weight:600;cursor:pointer}
+details.done .dn{background:var(--okbg);color:var(--ok)}
+.empty{text-align:center;padding:40px 10px;color:var(--muted)}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:22px;box-shadow:0 14px 34px -24px var(--g2)}
+.card h2{font-size:1.4rem;margin-bottom:8px}
+.muted{color:var(--muted)}
+.btn{background:var(--g1);color:var(--onbtn);border:0;border-radius:12px;padding:13px 24px;font:700 1rem inherit;font-family:inherit;cursor:pointer;box-shadow:0 8px 20px -10px var(--g1);transition:.2s}
+.btn:hover:not(:disabled){transform:translateY(-2px)}
+.btn.alt{background:transparent;color:var(--ink);border:1px solid var(--line);box-shadow:none}
+.btn:disabled{opacity:.4;cursor:default}
+.row{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
+.hud{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:12px}
+.st{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:8px 12px;font-family:var(--mono)}
+.st small{display:block;color:var(--muted);font-size:.7rem}
+.st b{font-size:1.35rem}
+.st.hot{border-color:var(--sun);animation:glow 1s ease-in-out infinite alternate}
+@keyframes glow{to{box-shadow:0 0 16px var(--sun)}}
+.tbar{height:10px;margin-bottom:12px}
+.tbar.low i{background:var(--bad)}
+.nodes{display:flex;gap:6px;margin-bottom:12px}
+.nodes i{flex:1;height:6px;border-radius:3px;background:var(--line);transition:.3s}
+.nodes i.cur{background:var(--g1);box-shadow:0 0 8px var(--g1)}
+.nodes i.y{background:var(--ok)}.nodes i.n{background:var(--bad)}
+.term{background:var(--surface);border:1px solid var(--line);border-radius:18px;overflow:hidden}
+.term.shake{animation:shake .4s}
+@keyframes shake{25%{transform:translateX(-8px)}75%{transform:translateX(8px)}}
+.tt{display:flex;align-items:center;gap:6px;padding:10px 14px;background:var(--g3);font:.75rem var(--mono);color:var(--muted)}
+.tt i{width:10px;height:10px;border-radius:50%;background:var(--g1)}
+.tt em{margin-left:auto;font-style:normal}
+.tb{padding:20px}
+.q{font:600 1.2rem/1.45 Georgia,serif;min-height:3.6em;margin:0 0 14px}
+.q::after{content:"▍";color:var(--g1);animation:bl 1s steps(1) infinite}
+@keyframes bl{50%{opacity:0}}
+.opt{display:flex;gap:12px;align-items:center;width:100%;text-align:left;background:var(--bg);color:var(--ink);border:2px solid var(--line);border-radius:14px;padding:12px 14px;margin-bottom:10px;font:inherit;cursor:pointer;transition:.18s;position:relative}
+.opt kbd{font:700 .8rem var(--mono);background:var(--g3);border-radius:8px;padding:3px 9px;color:var(--g2)}
+.opt:hover:not(:disabled){border-color:var(--g1);transform:translateX(4px)}
+.opt.ok{border-color:var(--ok);background:var(--okbg)}
+.opt.bad{border-color:var(--bad);background:var(--badbg)}
+.opt.gone{opacity:.25;pointer-events:none}
+.opt:disabled{cursor:default;color:var(--ink)}
+.fb{margin-top:4px;padding:12px 14px;border-radius:12px;background:var(--g3);animation:in .3s}
+@keyframes in{from{opacity:0;transform:translateY(8px)}}
+.score{font:700 3.4rem var(--mono);color:var(--g2);margin:6px 0}
+.rank{display:inline-block;background:var(--g1);color:var(--onbtn);border-radius:999px;padding:6px 16px;font-weight:700}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:16px 0}
+.rev{margin:14px 0 0;padding:0;list-style:none}
+.rev li{padding:10px 0;border-top:1px solid var(--line);font-size:.95rem}
+.p{position:fixed;width:9px;height:9px;border-radius:50%;pointer-events:none;z-index:120;animation:pop .9s ease-out forwards}
+@keyframes pop{to{transform:translate(var(--dx),var(--dy)) rotate(360deg) scale(.2);opacity:0}}
+.fl{position:fixed;font:700 1.3rem var(--mono);color:var(--ok);pointer-events:none;z-index:120;animation:up 1s ease-out forwards}
+@keyframes up{to{transform:translateY(-60px);opacity:0}}
+[hidden]{display:none!important}
+@media (prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;animation-iteration-count:1!important;transition:none!important}}
+html{scroll-behavior:smooth;scroll-padding-top:calc(76px + env(safe-area-inset-top,0px))}
+.nav{position:fixed;top:0;left:0;right:0;z-index:90;padding-top:env(safe-area-inset-top,0px);--nc:#fff;--gl:#f0b85a;background:rgba(56,56,56,.72);backdrop-filter:blur(10px);transition:background .3s,box-shadow .3s}
+.nav.solid{background:rgba(46,46,46,.94)}
+.nw{max-width:1100px;margin:0 auto;padding:0 22px;height:68px;display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:18px}
+.lg{width:40px;height:40px;border:2px solid var(--nc);display:grid;place-items:center;color:var(--nc);font:700 .95rem Georgia,serif;text-decoration:none}
+.lks{display:flex;gap:6px;justify-self:center}
+.lk{color:var(--nc);text-decoration:none;font-weight:600;font-size:.85rem;letter-spacing:.08em;text-transform:uppercase;padding:8px 12px;border-radius:8px;transition:.2s}
+.lk:hover{background:color-mix(in srgb,var(--nc) 12%,transparent)}
+.lk.on{color:var(--gl)}
+.rt{display:flex;gap:8px;align-items:center}
+.nav .search{background:color-mix(in srgb,var(--nc) 14%,transparent);border:1px solid color-mix(in srgb,var(--nc) 30%,transparent);border-radius:999px;padding:1px 6px 1px 12px}
+.nav .search input{width:170px;color:var(--nc);padding:9px 0;transition:width .3s}
+.nav .search input:focus{width:240px}
+.nav .search input::placeholder{color:color-mix(in srgb,var(--nc) 65%,transparent)}
+.nav .ic{width:40px;height:40px;border-radius:50%}
+#home{position:relative;min-height:100vh;display:grid;place-items:center;text-align:center;color:#fff;overflow:hidden;padding:110px 22px 90px}
+#bg{position:fixed;inset:0;z-index:-1;pointer-events:none;filter:blur(var(--bl,0px));transform:scale(1.1);will-change:filter}#bg svg{width:100%;height:100%;display:block}body{background:none}.sec,.foot{background:color-mix(in srgb,var(--bg) 76%,transparent)}
+#bg [data-d]{transition:transform .25s ease-out}
+.ov{position:absolute;inset:0;background:linear-gradient(180deg,rgba(24,24,24,.62),rgba(24,24,24,.4) 55%,rgba(24,24,24,.66))}
+.hc{position:relative;max-width:760px}
+.hc h1{font:700 clamp(2rem,6.5vw,4.2rem)/1.12 "Segoe UI",system-ui,sans-serif;letter-spacing:.09em;text-transform:uppercase;color:#fff}
+.hc p{font-size:clamp(1rem,2.2vw,1.2rem);margin:20px auto 30px;max-width:560px;color:#e5f5ec}
+.hb{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+.hbtn{color:#fff;border:2px solid #fff;padding:13px 26px;text-decoration:none;font-weight:700;font-size:.85rem;letter-spacing:.1em;text-transform:uppercase;transition:.2s}
+.hbtn:hover{background:rgba(255,255,255,.18)}
+.hbtn.fill{background:#fff;color:#12301f}.hbtn.fill:hover{background:var(--g3)}
+.dwn{position:absolute;bottom:26px;left:50%;margin-left:-22px;width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,.25);color:#fff;display:grid;place-items:center;text-decoration:none;font-size:1.4rem;animation:bob 1.8s ease-in-out infinite}
+@keyframes bob{50%{transform:translateY(8px)}}
+.sec{padding:40px 0 24px}
+.wrap.wide{max-width:1100px}
+.sh{font-size:clamp(1.9rem,4.5vw,2.6rem);margin-bottom:8px}
+.sh::after{content:"";display:block;width:56px;height:4px;border-radius:2px;background:var(--g1);margin-top:10px}
+.lay{display:grid;grid-template-columns:250px 1fr;gap:28px;align-items:start}
+#side{position:sticky;top:88px;max-height:calc(100vh - 110px);overflow:auto;background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:10px}
+#side button{display:block;width:100%;text-align:left;border:0;background:transparent;color:var(--ink);font:inherit;font-size:.92rem;padding:9px 12px;border-radius:10px;cursor:pointer;transition:.18s}
+#side button:hover{background:var(--g3)}
+#side button.act{background:var(--g1);color:var(--onbtn);font-weight:700}
+#side button.ok::after{content:" ✔";color:var(--ok)}
+.gl{font-weight:700;font-size:.75rem;color:var(--muted);padding:10px 12px 4px}
+details{scroll-margin-top:92px}
+.fl2{animation:f2 1.3s}
+@keyframes f2{0%,55%{box-shadow:0 0 0 4px var(--g1)}}
+.foot{padding:40px 20px;text-align:center;font-size:.9rem}
+@media (max-width:860px){.lay{grid-template-columns:1fr}#side{top:calc(68px + env(safe-area-inset-top,0px));z-index:5;display:flex;gap:6px;overflow-x:auto;max-height:none;padding:8px;border-radius:12px}#side button{width:auto;white-space:nowrap}.gl{display:none}}
+@media (max-width:760px){.lg{display:none}.nw{grid-template-columns:1fr auto;gap:8px;padding:0 12px}.lks{justify-self:start}.lk{padding:8px;font-size:.72rem}.nav .search input{width:96px}.nav .search input:focus{width:150px}}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+</style></head>
+<body>
+<div id="bg" aria-hidden="true"><svg viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+<defs><linearGradient id="wd" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e6bf92"/><stop offset="1" stop-color="#c8996a"/></linearGradient>
+<linearGradient id="bgG" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#cfcfcf"/><stop offset="1" stop-color="#8f8f8f"/></linearGradient>
+<pattern id="ln" width="60" height="44" patternUnits="userSpaceOnUse"><path d="M0 43.5H60" stroke="#bdbdbd" stroke-width="2" opacity=".7"/></pattern>
+<pattern id="ks" width="50" height="44" patternUnits="userSpaceOnUse"><rect x="5" y="4" width="40" height="34" rx="8" fill="#cfcfcf"/></pattern>
+<g id="cn"><ellipse cx="0" cy="12" rx="70" ry="24" fill="#d9bb62"/><ellipse cx="0" cy="0" rx="70" ry="24" fill="#f2d98a" stroke="#d9bb62" stroke-width="4"/></g>
+</defs>
+<rect width="1600" height="900" fill="url(#bgG)"/><rect y="766" width="1600" height="134" fill="url(#wd)"/>
+<g data-d="14"><g transform="rotate(-7 360 450)"><rect x="120" y="150" width="520" height="640" rx="18" fill="#fff" opacity=".72"/><rect x="150" y="200" width="460" height="560" fill="url(#ln)"/><path d="M400 150V790" stroke="#e2857a" opacity=".55" stroke-width="3"/>
+<g font-family="Consolas,monospace" font-size="26" fill="#3f3f3f"><text x="170" y="215">Ativo</text><text x="590" y="215" text-anchor="end">48.200</text><text x="170" y="259">Passivo</text><text x="590" y="259" text-anchor="end">31.750</text><text x="170" y="303">Patrim. Líq.</text><text x="590" y="303" text-anchor="end">16.450</text><text x="170" y="391">Receita</text><text x="590" y="391" text-anchor="end">120.900</text><text x="170" y="435">Custos</text><text x="590" y="435" text-anchor="end">-74.300</text><text x="170" y="479" font-weight="700">Lucro</text><text x="590" y="479" text-anchor="end" font-weight="700">46.600</text></g></g></g>
+<g data-d="28"><path d="M940 760H1540" stroke="#3f3f3f" stroke-width="5"/>
+<g fill="#6f6f6f"><rect x="980" y="640" width="60" height="120" rx="10"/><rect x="1070" y="570" width="60" height="190" rx="10" fill="#e5b352"/><rect x="1160" y="610" width="60" height="150" rx="10"/><rect x="1250" y="500" width="60" height="260" rx="10" fill="#e5b352"/><rect x="1340" y="430" width="60" height="330" rx="10"/><rect x="1430" y="340" width="60" height="420" rx="10" fill="#e5b352"/></g>
+<polyline points="1010,600 1100,530 1190,570 1280,460 1370,390 1460,300" fill="none" stroke="#3f3f3f" stroke-width="6" stroke-linejoin="round"/>
+<g fill="#fff" stroke="#3f3f3f" stroke-width="5"><circle cx="1010" cy="600" r="10"/><circle cx="1100" cy="530" r="10"/><circle cx="1190" cy="570" r="10"/><circle cx="1280" cy="460" r="10"/><circle cx="1370" cy="390" r="10"/><circle cx="1460" cy="300" r="10"/></g></g>
+<g data-d="46"><use href="#cn" x="800" y="836"/><use href="#cn" x="800" y="812"/><use href="#cn" x="800" y="788"/><use href="#cn" x="800" y="764"/><use href="#cn" x="890" y="850"/><use href="#cn" x="890" y="826"/><use href="#cn" x="710" y="856"/></g>
+<g data-d="36" transform="translate(1230 90) rotate(8)"><rect width="250" height="350" rx="26" fill="#3f3f3f"/><rect x="20" y="22" width="210" height="70" rx="10" fill="#cfcfcf"/><text x="218" y="76" font-size="40" text-anchor="end" fill="#3f3f3f" font-family="Consolas,monospace">1.248,00</text><rect x="0" y="110" width="250" height="220" fill="url(#ks)"/></g>
+</svg>
+</div>
+<header class="nav" id="nav"><div class="nw">
+<a class="lg" href="#home" aria-label="Início">TC</a>
+<nav class="lks"><a class="lk on" href="#home">Início</a><a class="lk" href="#conteudo">Conteúdo</a><a class="lk" href="#quiz">Quiz</a></nav>
+<div class="rt"><div class="search"><span>🔍</span><input id="q" type="search" placeholder="Pesquisar no conteúdo" autocomplete="off" aria-label="Pesquisar no conteúdo"><button id="clr" hidden aria-label="Limpar busca">✕</button></div><button class="ic" id="snd" aria-label="Ligar ou desligar o som">🔊</button></div>
+</div></header>
+
+<section id="home">
+<div class="ov"></div>
+<div class="hc"><h1>Teoria da Contabilidade</h1><p>Resumos e quiz sobre a história e a metodologia da contabilidade, o profissional, a informação e o mercado.</p><div class="hb"><a class="hbtn" href="#conteudo">Ver conteúdo</a><a class="hbtn fill" href="#quiz">Fazer o quiz</a></div></div>
+<a class="dwn" href="#conteudo" aria-label="Rolar para o conteúdo">⌄</a>
+</section>
+
+<section id="conteudo" class="sec"><div class="wrap wide">
+<h2 class="sh">Conteúdo</h2>
+<p class="muted">Resumos dos Capítulos 1 e 2. Clique no menu lateral para ir direto a cada parte.</p>
+<div class="bar2">
+<div class="chips" id="chips"><button class="chip" data-c="0" aria-pressed="true">Todos</button><button class="chip" data-c="1" aria-pressed="false">Capítulo 1</button><button class="chip" data-c="2" aria-pressed="false">Capítulo 2</button></div>
+<button class="pill" id="exp">Expandir tudo</button>
+</div>
+<div class="prog"><span id="progT"></span><div class="pbar"><i id="progB"></i></div></div>
+<p class="count" id="count" aria-live="polite"></p>
+<div class="lay"><aside id="side" aria-label="Seções do conteúdo"></aside><div id="sections"></div></div>
+</div></section>
+
+<section id="quiz" class="sec"><div class="wrap">
+<h2 class="sh">Quiz</h2>
+<p class="muted" style="margin-bottom:18px">Teste o que você estudou no modo desafio.</p>
+<div class="card" id="qSetup">
+<h2>Modo desafio</h2>
+<p class="muted">Sem limite de tempo. Sequências de acertos (combo) valem mais pontos. Use as teclas 1 a 4 para responder.</p>
+<div class="chips" id="qSeg"><button class="chip" data-c="1" aria-pressed="false">Capítulo 1</button><button class="chip" data-c="2" aria-pressed="false">Capítulo 2</button><button class="chip" data-c="0" aria-pressed="true">Os dois</button></div>
+<p class="muted" id="best"></p>
+<button class="btn" id="start">Iniciar desafio</button>
+</div>
+<div id="qPlay" hidden>
+<div class="hud">
+<div class="st"><small>PONTOS</small><b id="hPts">0</b></div>
+<div class="st" id="hCombo"><small>COMBO</small><b id="hC">x0</b></div>
+<div class="st"><small>ACERTOS</small><b id="hA">0</b></div>
+</div>
+<div class="nodes" id="nodes"></div>
+<div class="term" id="term">
+<div class="tt"><i></i><i></i><i></i><span id="qNum"></span><em>quiz.exe</em></div>
+<div class="tb">
+<p class="q" id="qText"></p>
+<div id="qOpts"></div>
+<div class="fb" id="qFb" hidden></div>
+<div class="row"><button class="pill" id="l5">✂️ 50/50 (F)</button><button class="btn" id="next" hidden>Próxima</button></div>
+</div></div>
+</div>
+<div class="card" id="qEnd" hidden>
+<h2>Desafio concluído</h2>
+<div class="score" id="endScore">0</div>
+<span class="rank" id="rank"></span>
+<div class="stats"><div class="st"><small>ACERTOS</small><b id="eH"></b></div><div class="st"><small>MAIOR COMBO</small><b id="eC"></b></div><div class="st"><small>PRECISÃO</small><b id="eP"></b></div></div>
+<ul class="rev" id="rev"></ul>
+<div class="row"><button class="btn" id="again">Jogar de novo</button><button class="btn alt" id="toSum">Voltar aos resumos</button></div>
+</div>
+
+</div></section>
+<footer class="foot muted">Teoria da Contabilidade: material de estudo dos Capítulos 1 e 2</footer>
+<script>
+
+const CONTENT = {
+1:{title:"Capítulo 1 — História, Objetivos e Metodologia da Contabilidade",sections:[
+["Evolução histórica",[
+"<b>Antiguidade (4.000 a.C.):</b> vestígios na Mesopotâmia, Suméria, Egito e China; controle rudimentar de rebanhos e marcações em pedras, árvores e paredes.",
+"<b>Renascimento (1494):</b> expansão do comércio marítimo; Luca Pacioli publica 'De Computis et Scripturis' e dissemina o Método das Partidas Dobradas.",
+"<b>Séc. XIX e contemporâneo:</b> a Revolução Industrial cria a necessidade de apurar custos e a contabilidade vira ferramenta gerencial."]],
+["Escola Europeia x Estadunidense",[
+"<b>Europeia (italiana):</b> viés teórico e histórico; declínio por dogmatismo, excesso de teoria sem prática e pouca empatia com a auditoria.",
+"<b>Estadunidense:</b> nasce nos anos 1930, após a crise de 1929, para restabelecer a confiança de investidores e credores.",
+"Foco no usuário, uso de hipóteses, valorização da prática, da auditoria independente e do disclosure."]],
+["Contabilidade como ciência social aplicada",[
+"<b>Definição (Hilário Franco, 1997):</b> ciência que estuda os fenômenos ocorridos no patrimônio das entidades.",
+"<b>Objeto:</b> o patrimônio, suas variações e a composição da riqueza; vale para qualquer entidade (pública ou privada, lucrativa ou não).",
+"<b>Funções:</b> registro, classificação, demonstração, análise e interpretação, com o objetivo final de apoiar decisões."]],
+["Usuários da informação",[
+"<b>Internos:</b> administradores, diretores e gestores; precisam de informação analítica, detalhada e customizada.",
+"<b>Externos:</b> investidores, credores, fornecedores, governo, clientes; usam demonstrações de propósito geral (BP, DRE, DFC, DMPL).",
+"<b>Custo-benefício:</b> atender cada usuário individualmente teria custo proibitivo, por isso se publicam demonstrações de propósito geral."]],
+["Quatro abordagens contábeis",[
+"<b>Societária (financeira):</b> usuários externos; princípios contábeis, Lei das S.A. e convergência com IFRS/CPC/CFC.",
+"<b>Gerencial:</b> usuários internos; planejamento, controle e decisão, sem obrigatoriedade de normas estritas.",
+"<b>Fiscal (tributária):</b> foco no Fisco; apuração de tributos e planejamento tributário (Lucro Real, Presumido, Arbitrado).",
+"<b>Custos:</b> cálculo e controle de custos de bens, mercadorias e serviços; base para estoques e orçamentos."]],
+["Métodos e problemas de pesquisa",[
+"<b>Dedutivo (geral → particular):</b> parte de postulados e objetivos do relatório financeiro, formula hipóteses e depois testa empiricamente.",
+"<b>Indutivo (particular → geral):</b> parte da observação de fatos reais e generaliza para prever comportamentos futuros.",
+"<b>Cinco problemas de pesquisa:</b> ética (informação justa e neutra), comportamental pura (usuário interpretou bem?), macroeconômica (metas nacionais), social (impacto em toda a sociedade) e sistêmica (fluxo de inputs e outputs)."]],
+["Contabilidade na era digital",[
+"A contabilidade evolui junto com as necessidades sociais e econômicas: da 'caça à indústria'.",
+"Big data e cloud computing eliminam rotinas mecânicas, não a profissão.",
+"O profissional moderno precisa de capacidade de análise e visão estratégica baseada na teoria."]]
+]},
+2:{title:"Capítulo 2 — O Profissional, a Informação e o Mercado",sections:[
+["Quatro pilares de atuação",[
+"<b>Setor privado:</b> controladoria, auditoria interna, custos e preços, planejamento tributário, M&A.",
+"<b>Setor público:</b> orçamento, carreira fiscal, Tribunais de Contas, contabilidade governamental.",
+"<b>Autônomo:</b> escritórios, consultoria, perícia judicial e extrajudicial, auditoria externa independente.",
+"<b>Ensino e pesquisa:</b> docência, produção acadêmica, livros e pareceres, fundações de pesquisa."]],
+["Planejamento, execução e controle",[
+"<b>Planejamento (Economia):</b> formulação estratégica, cenários macroeconômicos e premissas do negócio.",
+"<b>Execução (Administração):</b> gestão de recursos e pessoas e colocação das estratégias em prática.",
+"<b>Controle (Contabilidade):</b> mensura as variações patrimoniais ocorridas, gera relatórios e retroalimenta o planejamento."]],
+["Características qualitativas da informação",[
+"<b>Fundamentais:</b> relevância (valor preditivo e/ou confirmatório; inclui materialidade) e representação fidedigna (completa, neutra e isenta de erros).",
+"<b>De melhoria:</b> comparabilidade (entre entidades e períodos), verificabilidade (consenso entre observadores independentes), tempestividade e compreensibilidade (clareza e concisão)."]],
+["Relação custo-benefício da divulgação",[
+"Coletar, mensurar, processar, auditar e divulgar informação gera custos relevantes.",
+"O planejador do sistema contábil busca o nível ótimo de detalhamento, equilibrando transparência e ônus administrativo.",
+"Informação personalizada para cada usuário seria inviável; a solução são os relatórios de propósito geral (Gelbcke et al., 2018)."]],
+["Teoria da Agência",[
+"<b>Principal (proprietário):</b> delega a gestão, busca valor de mercado e retorno de longo prazo; sofre com a assimetria informacional.",
+"<b>Agente (administrador):</b> controla o dia a dia e busca sua própria utilidade (incentivos, poder, bônus de curto prazo); pode agir contra o Principal sem controles.",
+"<b>Mitigação dos custos de agência:</b> sistemas de monitoramento (comitês de auditoria, covenants), alinhamento de incentivos (stock options, bônus vinculados a lucros auditados) e auditoria independente."]],
+["Formas de evidenciação (Iudícibus, 2015)",[
+"<b>Demonstrações contábeis:</b> BP, DRE, DFC, DMPL, DVA; meio formal e principal.",
+"<b>Notas explicativas:</b> dados qualitativos e critérios de cálculo.",
+"<b>Informações entre parênteses:</b> explicações concisas no corpo das demonstrações.",
+"<b>Quadros suplementares:</b> maior abertura estatística.",
+"<b>Comentários do auditor:</b> parecer independente que agrega credibilidade.",
+"<b>Relatório da administração:</b> visão não financeira, prospectiva e estratégica."]],
+["Relato Integrado",[
+"<b>Capitais múltiplos (ESG):</b> humano, social, de governança, intelectual e meio ambiente.",
+"<b>Dados dos colaboradores:</b> salários, benefícios, saúde e segurança, treinamento e relações com sindicatos.",
+"<b>Regulação:</b> diretrizes da GRI; no Brasil, CTG 09 do CFC, IN 480 da CVM e DN 170/2018 do TCU."]]
+]}};
+
+const QUIZ = [
+[1,"Quem publicou o tratado 'De Computis et Scripturis', que disseminou as Partidas Dobradas?",["Luca Pacioli","Hilário Franco","Iudícibus","Gelbcke"],0,"Luca Pacioli publicou o tratado em 1494, no Renascimento."],
+[1,"A Escola Estadunidense de contabilidade nasceu na década de 1930 principalmente para:",["Aprofundar debates doutrinários","Restabelecer a confiança de investidores e credores após a crise de 1929","Padronizar a contabilidade de custos industriais","Substituir a auditoria independente"],1,"Ela surgiu pós-crise de 1929, com foco no usuário da informação."],
+[1,"Segundo Hilário Franco (1997), o objeto de estudo da contabilidade é:",["O lucro das empresas","Os tributos devidos ao Fisco","O patrimônio das entidades e suas variações","As decisões dos administradores"],2,"A contabilidade estuda os fenômenos ocorridos no patrimônio das entidades."],
+[1,"Qual abordagem contábil tem como público o Fisco (União, Estados e Municípios)?",["Societária","Gerencial","De custos","Fiscal (tributária)"],3,"A contabilidade fiscal apura tributos e faz o planejamento tributário."],
+[1,"Por que as empresas publicam demonstrações de propósito geral?",["Porque a lei proíbe relatórios internos","Porque atender cada usuário individualmente teria custo proibitivo","Porque investidores não querem detalhes","Porque o Fisco exige"],1,"É a restrição custo-benefício: o benefício deve superar o custo de preparação."],
+[1,"No método dedutivo, o ponto de partida é:",["A observação de fatos reais do mercado","Entrevistas com gestores","Postulados e premissas gerais considerados evidentes","Dados estatísticos de empresas"],2,"O dedutivo vai do geral ao particular; o indutivo parte da observação dos fatos."],
+[1,"Qual problema de pesquisa analisa se o usuário recebeu e interpretou corretamente a informação?",["Ético","Comportamental pura","Macroeconômico","Sistêmico"],1,"A abordagem comportamental pura foca no usuário final no processo decisório."],
+[1,"Sobre a tecnologia (big data, cloud), o Capítulo 1 conclui que ela:",["Elimina a profissão contábil","É irrelevante","Elimina rotinas puramente mecânicas, mas não a profissão","Torna a teoria desnecessária"],2,"O profissional passa a precisar de mais análise crítica e visão estratégica."],
+[2,"No ciclo planejamento, execução e controle, a Contabilidade corresponde a:",["Planejamento","Execução","Controle","Nenhuma das etapas"],2,"Economia planeja, Administração executa e Contabilidade controla."],
+[2,"Quais são as características qualitativas FUNDAMENTAIS da informação?",["Comparabilidade e verificabilidade","Relevância e representação fidedigna","Tempestividade e compreensibilidade","Materialidade e neutralidade"],1,"As de melhoria são comparabilidade, verificabilidade, tempestividade e compreensibilidade."],
+[2,"Para ser fidedigna, a informação deve ser:",["Breve, clara e oportuna","Completa, neutra e isenta de erros","Preditiva, confirmatória e material","Comparável, verificável e auditada"],1,"Esses são os três atributos da representação fidedigna."],
+[2,"Na Teoria da Agência, a assimetria informacional afeta principalmente:",["O Agente, que não conhece o mercado","O Fisco","O Principal, que não observa diretamente as ações do Agente","O auditor independente"],2,"O proprietário está fora do dia a dia da empresa e não vê o que o administrador faz."],
+[2,"Qual destes é um mecanismo de ALINHAMENTO DE INCENTIVOS?",["Comitê de auditoria","Plano de stock options","Covenants contratuais","Publicação trimestral das demonstrações"],1,"Stock options e bônus ligados a lucros auditados alinham o Agente ao acionista. Os demais são monitoramento."],
+[2,"Segundo Iudícibus (2015), a função das notas explicativas é:",["Emitir parecer independente","Fazer análise prospectiva do negócio","Esclarecer o conteúdo sintético de contas específicas das demonstrações","Substituir o balanço patrimonial"],2,"Elas trazem dados qualitativos e detalhamento dos critérios de cálculo."],
+[2,"Qual norma da CVM regulamenta o Relato Integrado, segundo o material?",["CTG 09","DN 170/2018","IN 480","CPC 00"],2,"A CTG 09 é do CFC e a DN 170/2018 é do TCU."],
+[2,"Uma característica de melhoria que garante o consenso entre observadores independentes e bem informados é a:",["Comparabilidade","Verificabilidade","Tempestividade","Compreensibilidade"],1,"Verificabilidade: observadores independentes chegam ao mesmo resultado de mensuração."]
+];
+
+const $=id=>document.getElementById(id),$$=s=>[...document.querySelectorAll(s)];
+const store={get(k){try{return localStorage.getItem(k)}catch(e){return null}},set(k,v){try{localStorage.setItem(k,v)}catch(e){}}};
+let mute=store.get("mute")==="1";
+$("snd").textContent=mute?"🔇":"🔊";
+$("snd").onclick=()=>{mute=!mute;store.set("mute",mute?"1":"0");$("snd").textContent=mute?"🔇":"🔊"};
+function beep(f,d=.12){if(mute)return;try{const c=beep.c||(beep.c=new(window.AudioContext||window.webkitAudioContext)()),o=c.createOscillator(),g=c.createGain();o.frequency.value=f;g.gain.value=.05;o.connect(g);g.connect(c.destination);o.start();o.stop(c.currentTime+d)}catch(e){}}
+function burst(x,y,n=16,cols=["#e5b352","#ffd98a","#ffffff","#9a9a9a"],spread=90){for(let k=0;k<n;k++){const p=document.createElement("span");p.className="p";const a=Math.random()*6.28,r=spread*(.4+Math.random());p.style.cssText=`left:${x}px;top:${y}px;background:${cols[k%cols.length]};--dx:${Math.cos(a)*r}px;--dy:${Math.sin(a)*r+30}px`;document.body.appendChild(p);setTimeout(()=>p.remove(),950)}}
+function tab(n){$(n==="res"?"conteudo":"quiz").scrollIntoView({behavior:"smooth",block:"start"})}
+
+/* Resumos */
+const AC={a:"aáàâãä",e:"eéèêë",i:"iíìîï",o:"oóòôõö",u:"uúùûü",c:"cç"};
+const rxSrc=q=>q.trim().split("").map(ch=>{const l=ch.toLowerCase();return AC[l]?"["+AC[l]+"]":ch.replace(/[.*+?^${}()|[\]\\]/g,"\\$&")}).join("");
+const hl=(h,s)=>s?h.replace(new RegExp("(<[^>]+>)|("+s+")","gi"),(m,t,x)=>t?t:"<mark>"+x+"</mark>"):h;
+let studied=[];try{studied=JSON.parse(store.get("studied")||"[]")}catch(e){}
+let chap=0,query="";
+const ALL=[];Object.keys(CONTENT).forEach(c=>CONTENT[c].sections.forEach((s,i)=>ALL.push({id:c+"-"+i,c:+c,t:s[0],b:s[1]})));
+function prog(){$$("#side [data-id]").forEach(b=>b.classList.toggle("ok",studied.includes(b.dataset.id)));const n=studied.length;$("progT").textContent=n+" de "+ALL.length+" seções estudadas";$("progB").style.width=(n/ALL.length*100)+"%"}
+function render(){
+ const src=rxSrc(query),re=src&&new RegExp(src,"i");
+ const list=ALL.filter(s=>(!chap||s.c===chap)&&(!re||re.test(s.t+" "+s.b.join(" ").replace(/<[^>]+>/g,""))));
+ $("count").textContent=query?(list.length?list.length+" seção(ões) encontrada(s)":""):"";
+ let h="",last=0;
+ list.forEach(s=>{
+  if(s.c!==last){last=s.c;h+=`<div class="ch"><h2>${CONTENT[s.c].title}</h2><button class="pill go" data-c="${s.c}">Praticar ⚡</button></div>`}
+  h+=`<details data-id="${s.id}" class="${studied.includes(s.id)?"done":""}" ${query?"open":""}><summary><span>${hl(s.t,src)}</span><i class="tick">✔</i></summary><div class="body"><ul>${s.b.map(t=>`<li>${hl(t,src)}</li>`).join("")}</ul><button class="dn">${studied.includes(s.id)?"Estudado ✔":"Marcar como estudado"}</button></div></details>`});
+ $("sections").innerHTML=h||`<div class="empty">Nada encontrado para "<b></b>". Tente outra palavra ou mude o filtro.</div>`;
+ const b=$("sections").querySelector(".empty b");if(b)b.textContent=query;
+ $("clr").hidden=!query;$("exp").textContent="Expandir tudo";side(list);prog();
+}
+$("q").oninput=e=>{query=e.target.value;render();if(query&&scrollY<$("conteudo").offsetTop-60)tab("res")};
+$("clr").onclick=()=>{$("q").value="";query="";render();$("q").focus()};
+$$("#chips .chip").forEach(b=>b.onclick=()=>{chap=+b.dataset.c;$$("#chips .chip").forEach(x=>x.setAttribute("aria-pressed",x===b));render()});
+$("exp").onclick=()=>{const ds=$$("#sections details"),open=ds.some(d=>!d.open);ds.forEach(d=>d.open=open);$("exp").textContent=open?"Recolher tudo":"Expandir tudo"};
+$("sections").onclick=e=>{
+ const d=e.target.closest("details");
+ if(e.target.classList.contains("dn")){const id=d.dataset.id,on=!studied.includes(id);studied=on?[...studied,id]:studied.filter(x=>x!==id);store.set("studied",JSON.stringify(studied));d.classList.toggle("done",on);e.target.textContent=on?"Estudado ✔":"Marcar como estudado";if(on){const r=e.target.getBoundingClientRect();burst(r.left+40,r.top,10);beep(520)}prog()}
+ if(e.target.classList.contains("go")){setScope(+e.target.dataset.c);tab("quiz")}
+};
+document.addEventListener("keydown",e=>{if(e.key==="/"&&document.activeElement.tagName!=="INPUT"){e.preventDefault();$("q").focus()}});
+render();
+
+/* Quiz */
+let scope=0,qs=[],i=0,pts=0,combo=0,maxc=0,hits=0,t=20,tmax=20,timer,tw,locked=true,used={},log=[];
+const shuffle=a=>{a=a.slice();for(let k=a.length-1;k>0;k--){const j=Math.floor(Math.random()*(k+1));[a[k],a[j]]=[a[j],a[k]]}return a};
+function showBest(){const b=store.get("best-"+scope);$("best").textContent=b?"Recorde neste conteúdo: "+b+" pontos":""}
+function setScope(c){scope=c;$$("#qSeg .chip").forEach(x=>x.setAttribute("aria-pressed",+x.dataset.c===c));showBest()}
+$$("#qSeg .chip").forEach(b=>b.onclick=()=>setScope(+b.dataset.c));
+const show=id=>["qSetup","qPlay","qEnd"].forEach(x=>$(x).hidden=x!==id);
+function countTo(el,to,pre=""){const from=parseInt(el.dataset.v||0);el.dataset.v=to;const t0=performance.now();(function f(n){const p=Math.min((n-t0)/500,1);el.textContent=pre+Math.round(from+(to-from)*p);if(p<1)requestAnimationFrame(f)})(t0)}
+function start(){
+ const pool=QUIZ.filter(q=>!scope||q[0]===scope);
+ qs=shuffle(pool).map(q=>({q:q[1],opts:shuffle(q[2].map((x,k)=>({t:x,ok:k===q[3]}))),exp:q[4]}));
+ i=0;pts=0;combo=0;maxc=0;hits=0;used={};log=[];
+ $("hPts").dataset.v=0;$("hPts").textContent=0;$("hC").textContent="x0";$("hCombo").classList.remove("hot");
+ $("nodes").innerHTML=qs.map(()=>"<i></i>").join("");
+ $("l5").disabled=false;$("hA").textContent=0;
+ show("qPlay");ask();
+}
+function ask(){
+ const q=qs[i];locked=false;
+ $$("#nodes i").forEach((n,k)=>n.classList.toggle("cur",k===i));
+ $("qNum").textContent="questao_"+String(i+1).padStart(2,"0")+" / "+qs.length;
+ $("qFb").hidden=true;$("next").hidden=true;$("qOpts").innerHTML="";
+ clearInterval(tw);let n=0;$("qText").textContent="";
+ tw=setInterval(()=>{$("qText").textContent=q.q.slice(0,++n);if(n>=q.q.length)clearInterval(tw)},12);
+ q.opts.forEach((o,k)=>{const b=document.createElement("button");b.className="opt";b.innerHTML=`<kbd>${k+1}</kbd><span></span>`;b.lastChild.textContent=o.t;b.onclick=()=>answer(k);$("qOpts").appendChild(b)});
+ 
+}
+
+function answer(k){
+ if(locked)return;locked=true;clearInterval(timer);clearInterval(tw);
+ const q=qs[i],hit=k>=0&&q.opts[k].ok;$("qText").textContent=q.q;
+ const btns=$$("#qOpts .opt");btns.forEach((b,x)=>{b.disabled=true;if(q.opts[x].ok)b.classList.add("ok");else if(x===k)b.classList.add("bad")});
+ const ref=(btns[k]||$("term")).getBoundingClientRect(),cx=ref.left+ref.width/2,cy=ref.top+ref.height/2;
+ if(hit){combo++;maxc=Math.max(maxc,combo);hits++;$("hA").textContent=hits;const g=100+(combo-1)*25;pts+=g;countTo($("hPts"),pts);burst(cx,cy,18);beep(660);beep(880,.15);
+  const f=document.createElement("div");f.className="fl";f.textContent="+"+g;f.style.cssText=`left:${cx}px;top:${cy}px`;document.body.appendChild(f);setTimeout(()=>f.remove(),1000)}
+ else{combo=0;$("term").classList.remove("shake");void $("term").offsetWidth;$("term").classList.add("shake");beep(180,.25)}
+ $("hC").textContent="x"+combo;$("hCombo").classList.toggle("hot",combo>=3);
+ $$("#nodes i")[i].classList.remove("cur");$$("#nodes i")[i].classList.add(hit?"y":"n");
+ log.push({q:q.q,hit});
+ $("qFb").hidden=false;$("qFb").innerHTML="<b>"+(hit?"Correto!":"Não foi dessa vez.")+"</b> "+q.exp;
+ $("next").hidden=false;$("next").textContent=i===qs.length-1?"Ver resultado":"Próxima";$("next").focus();
+}
+$("next").onclick=()=>{i++;i<qs.length?ask():finish()};
+function fifty(){if(locked||used.f)return;used.f=1;$("l5").disabled=true;const w=$$("#qOpts .opt").filter((b,x)=>!qs[i].opts[x].ok);shuffle(w).slice(0,2).forEach(b=>b.classList.add("gone"));beep(400)}
+
+$("l5").onclick=fifty;
+document.addEventListener("keydown",e=>{
+ if($("qPlay").hidden||document.activeElement.tagName==="INPUT")return;const k=e.key.toLowerCase();
+ if(!locked&&"1234".includes(k)&&k)answer(+k-1);
+ else if(k==="f")fifty();
+ else if(locked&&(k==="enter"||k===" ")&&!$("next").hidden&&document.activeElement!==$("next")){e.preventDefault();$("next").click()}
+});
+function finish(){
+ const pct=Math.round(hits/qs.length*100);
+ countTo($("endScore"),pts);$("eH").textContent=hits+"/"+qs.length;$("eC").textContent="x"+maxc;$("eP").textContent=pct+"%";
+ $("rank").textContent=pct>=90?"🏆 Mestre Contábil":pct>=70?"📊 Analista":pct>=50?"🌱 Estagiário promissor":"📚 Calouro em treino";
+ $("rev").innerHTML=log.map(l=>`<li>${l.hit?"✅":"❌"} ${l.q}</li>`).join("");
+ const prev=parseInt(store.get("best-"+scope)||"0");if(pts>prev){store.set("best-"+scope,pts)}
+ show("qEnd");
+ if(pct>=70)for(let k=0;k<6;k++)setTimeout(()=>burst(innerWidth*(.15+Math.random()*.7),innerHeight*.3,24,undefined,220),k*180);
+}
+$("start").onclick=start;
+$("again").onclick=()=>{show("qSetup");showBest()};
+$("toSum").onclick=()=>tab("res");
+showBest();
+/* Navegação, lateral e parallax */
+const nav=$("nav"),lks=$$("#nav .lk");
+const navScroll=()=>nav.classList.toggle("solid",scrollY>40);
+addEventListener("scroll",navScroll,{passive:true});navScroll();
+const so=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)lks.forEach(a=>a.classList.toggle("on",a.getAttribute("href")==="#"+e.target.id))}),{rootMargin:"-45% 0px -50% 0px"});
+["home","conteudo","quiz"].forEach(id=>so.observe($(id)));
+$("home").addEventListener("mousemove",e=>{const x=e.clientX/innerWidth-.5,y=e.clientY/innerHeight-.5;$$("#bg [data-d]").forEach(g=>{const d=+g.dataset.d;if(!g.hasAttribute("transform")){g.style.transform=`translate(${-x*d}px,${-y*d}px)`}})});
+function side(list){
+ let h="",last=0;
+ list.forEach(s=>{if(s.c!==last){last=s.c;h+=`<div class="gl">Capítulo ${s.c}</div>`}h+=`<button data-id="${s.id}" class="${studied.includes(s.id)?"ok":""}">${s.t}</button>`});
+ $("side").innerHTML=h||'<div class="gl">Sem resultados</div>';
+ side.o&&side.o.disconnect();
+ side.o=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){$$("#side button").forEach(b=>b.classList.toggle("act",b.dataset.id===e.target.dataset.id));const a=$("side").querySelector(".act");if(a&&innerWidth<=860)$("side").scrollTo({left:a.offsetLeft-40,behavior:"smooth"})}}),{rootMargin:"-30% 0px -60% 0px"});
+ $$("#sections details").forEach(d=>side.o.observe(d));
+}
+$("side").onclick=e=>{const b=e.target.closest("button");if(!b)return;const d=$("sections").querySelector(`details[data-id="${b.dataset.id}"]`);if(!d)return;d.open=true;d.scrollIntoView({behavior:"smooth",block:"start"});d.classList.remove("fl2");void d.offsetWidth;d.classList.add("fl2")};
+$("q").addEventListener("keydown",e=>{if(e.key==="Escape"&&query)$("clr").click()});
+render();
+const bgBlur=()=>{const b=Math.min(scrollY/(innerHeight*.9),1)*14;document.documentElement.style.setProperty("--bl",b.toFixed(1)+"px")};
+addEventListener("scroll",bgBlur,{passive:true});bgBlur();
+</script>
+</body>
+</html>
